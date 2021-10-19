@@ -13,3 +13,4 @@ for k=1:10
         % Regress dynamics onto remaining terms to find sparse Xi
         Xi(biginds,ind) = Theta(:,biginds)\dXdt(:,ind); 
     end
+end

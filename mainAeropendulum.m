@@ -27,9 +27,10 @@ lambda = 0.1;
 eps = 0;
 %% call training script
 
-trainSINDYc
-
-
+my_trainSINDYc
+Xi_sparse=[{'theta','dtheta'};num2cell(Xi)]
+library_function=[{'coef'};yout];
+x_dot_cell = [library_function,Xi_sparse];
 %%
 
 figure()

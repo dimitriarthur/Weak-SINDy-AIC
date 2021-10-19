@@ -35,9 +35,10 @@ if(polyorder>=3)
 end
 
 if(useFourier)
-        yout{ind,1} = ['sin(yin)'];
+    for i=1:size(yin,2)
+        yout{ind,1} = ['sin(',yin{i},')'];
         ind = ind + 1;
-        yout{ind,1} = ['cos(yin)'];
+        yout{ind,1} = ['cos(',yin{i},')'];
         ind = ind + 1;
 end
 
