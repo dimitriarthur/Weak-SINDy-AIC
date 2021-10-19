@@ -11,5 +11,3 @@ function x_dot = Aeropendulum(t,x,u)
 
     x_dot=[dtheta;-c/J*dtheta - (m*l*g*sin(theta))/J + km*l/J*u.^2];
 end
-% [t,x]=ode45(@(t,x) Aeropendulum(t,x),tspan,[1.5882 0.00015])
-% [t,x]=ode45(@(t,x) Aeropendulum(t,x,ones(1,25001)*2.75)),tspan,[1.5882 0.00015])

@@ -23,7 +23,17 @@ function yout= myPoolData(yin,nVars,polyorder,useFourier)
             end
         end
     end
-    
+    if(polyorder>=3)
+        % poly order 3
+        for i=1:nVars
+            for j=i:nVars
+                for k=j:nVars
+                    yout(:,ind) = yin(:,i).*yin(:,j).*yin(:,k);
+                    ind = ind+1;
+                end
+            end
+        end
+    end
     if(useFourier)
             yout = [yout sin(yin) cos(yin)];
     end
