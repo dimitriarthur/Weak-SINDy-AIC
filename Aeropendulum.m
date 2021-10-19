@@ -10,4 +10,4 @@ function x_dot = Aeropendulum(t,x,u)
     J = 0.0113;
 
     x_dot=[dtheta;-c/J*dtheta - (m*l*g*sin(theta))/J + km*l/J*u.^2];
-end
+end 

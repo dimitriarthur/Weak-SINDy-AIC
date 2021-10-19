@@ -1,11 +1,10 @@
-function [tResult,xResult,u,dx] = getTrainingData(t_interval,x0,u_control)
+function [tResult,xResult,u] = getTrainingData(t_interval,x0,u_control)
    tResult = [];
    xResult = [];
-   dx=zeros(numel(t_interval)-2,2);
    u=[];
    x0_orig=x0;
    
-    for i=1:numel(t_interval)-2
+    for i=1:numel(t_interval)-1
        %handler to generate the specified control inputs 
        lrz = @(t,x) Aeropendulum(t,x,u_control(i));
        %integration interval
@@ -21,9 +20,9 @@ function [tResult,xResult,u,dx] = getTrainingData(t_interval,x0,u_control)
        x0=x(end,:);
     end
     
-    xResult_aux = [x0_orig; xResult];
+    xResult_aux = [x0_orig,
     %computing derivatives 
-    for i=2:numel(t_interval)-1
-       dx(i-1,:)=Aeropendulum(0.1,xResult_aux(i,:),u_control(i))';
+    for i=1:numel(t_interval)-1
+       Aeropendulum() 
     end
 end

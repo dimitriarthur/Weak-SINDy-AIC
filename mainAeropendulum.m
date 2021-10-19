@@ -15,15 +15,17 @@ u_control = [(ones(1,1000))*2.7 ...
              (ones(1,1000))*1.8];
          
 %% generating data
-[tResult, xResult, u] = getTrainingData(t_interval,x0,u_control)
-xaug=[xResult u]
+[tResult, xResult, u,dx] = getTrainingData(t_interval,x0,u_control);
+xaug=[xResult u];
 %% SINDYc parameters
 ModelName = 'SINDYc'; iModel = 1;
 Nvar = 3;
-polyorder = 3;
+n=3;
+polyorder = 2;
 usesine = 1;
 lambda = 0.1;
 eps = 0;
+%% call training script
 
 trainSINDYc
 

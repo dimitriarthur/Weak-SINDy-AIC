@@ -1,19 +1,22 @@
 % Sparse regression
 clear Theta Xi
-Theta = poolData(xaug,n,polyorder,usesine);
-Theta_norm = zeros(size(Theta,2),1); %zeros(size(Theta,2),1);ones
-for i = 1:size(Theta,2)
-   Theta_norm(i) = norm(Theta(:,i));
-   Theta(:,i) = Theta(:,i)./Theta_norm(i);
-end
+Theta = myPoolData(xaug,n,polyorder,usesine); %ok
+Theta_norm = zeros(size(Theta,2),1); %ok
+
+%this corresponds to a normalization on each column of the function library
+%for i = 1:size(Theta,2)
+%   Theta_norm(i) = norm(Theta(:,i));
+%   Theta(:,i) = Theta(:,i)./Theta_norm(i);
+%end
+
+%determining how many functions there is
 m = size(Theta,2);
 
-if exist('lambda_vec') == 1
-    Xi = sparsifyDynamicsIndependent(Theta,dx,lambda_vec,n-1);
-else
-    Xi = sparsifyDynamics(Theta,dx,lambda,n-1);
-end
-
+%if exist('lambda_vec') == 1
+%    Xi = sparsifyDynamicsIndependent(Theta,dx,lambda_vec,n-1);
+%else
+%end
+Xi = sparsifyDynamics(Theta,dx,lambda,n-1);
 
 if n == 3
     str_vars = {'theta','theta_dot','u'};
