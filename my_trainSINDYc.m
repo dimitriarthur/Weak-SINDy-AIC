@@ -16,7 +16,7 @@ end
 
 
 if n == 3
-    str_vars = {'x','y','u'};
+    str_vars = {'theta','theta_dot','u'};
 elseif n == 4
     str_vars = {'x','y','z','u'};
 elseif n == 6

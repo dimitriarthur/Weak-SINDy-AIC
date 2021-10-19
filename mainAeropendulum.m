@@ -16,9 +16,10 @@ u_control = [(ones(1,1000))*2.7 ...
          
 %% generating data
 [tResult, xResult, u] = getTrainingData(t_interval,x0,u_control)
+xaug=[xResult u]
 %% SINDYc parameters
 ModelName = 'SINDYc'; iModel = 1;
-Nvar = 2;
+Nvar = 3;
 polyorder = 3;
 usesine = 1;
 lambda = 0.1;
