@@ -45,7 +45,7 @@ u_control_test = [(ones(1,1000))*1.2 ...
              (ones(1,1000))*2.85];
 
 [tResult_test,xResult_test,u,dx] = simulateSystem(t_interval,xResult(7000,:),Xi,u_control_test,n,usesine,polyorder);
-[tResult_ode, xResult_ode, u,dx] = getTrainingData(t_interval,x0,u_control_test);
+[tResult_ode, xResult_ode, u_test,dx] = getTrainingData(t_interval,x0,u_control_test);
 %%
 
 subplot(2,2,1)
@@ -59,5 +59,24 @@ legend('$\theta$','$\dot \theta$','Interpreter','Latex')
 hold off
 subplot(2,2,2)
 plot(tResult,u_control(1:9999))
+title('Control Signal - Training')
+grid
+
+subplot(2,2,3)
+plot(tResult,xResult_ode(:,1),'LineWidth',1)
+grid
+hold on 
+plot(tResult,xResult_ode(:,2),'LineWidth',1)
+hold on
+plot(tResult,xResult_test(:,1),'LineWidth',1)
+hold on
+plot(tResult,xResult_test(:,2),'LineWidth',1)
+hold off
+title('\theta and \dot \theta - ODE vs SINDyC. MSE = 2.8166e-04','fontweight','bold')
+legend('$\theta_{ODE}$','$\dot \theta_{ODE}$','$\theta_{SINDYc}$','$\dot \theta_{SINDYc}$','Interpreter','Latex')
+
+subplot(2,2,4)
+plot(tResult,u_control_test(1:9999))
+title('Control Signal - Test')
 grid
 %% 
