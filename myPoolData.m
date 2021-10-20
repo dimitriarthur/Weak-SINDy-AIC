@@ -1,8 +1,7 @@
 % generates the library function for computing sparse regression
 function yout= myPoolData(yin,nVars,polyorder,useFourier) 
 %yin - vector concat; nVars - number of states; polyorder - degree;
-%useFourier - flag for trig terms.
-            
+%useFourier - flag for trig terms            
     n = size(yin,1);
     ind = 1;
     % poly order 0
@@ -27,7 +26,7 @@ function yout= myPoolData(yin,nVars,polyorder,useFourier)
         % poly order 3
         for i=1:nVars
             for j=i:nVars
-                for k=j:nVars
+                for k=j:nVars 
                     yout(:,ind) = yin(:,i).*yin(:,j).*yin(:,k);
                     ind = ind+1;
                 end
