@@ -46,6 +46,11 @@ u_control_test = [(ones(1,1000))*1.2 ...
 
 [tResult_test,xResult_test,u,dx] = simulateSystem(t_interval,xResult(7000,:),Xi,u_control_test,n,usesine,polyorder);
 [tResult_ode, xResult_ode, u_test,dx] = getTrainingData(t_interval,x0,u_control_test);
+
+% to compute AIC
+% - vary lambda and obtain multiple models
+% - compute error - validation for these models. return error
+% - calculate a ranking based on AIC
 %%
 
 subplot(2,2,1)
