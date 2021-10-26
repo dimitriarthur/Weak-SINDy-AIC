@@ -11,6 +11,6 @@ for k=1:10
     for ind = 1:n                   % n is state dimension
         biginds = ~smallinds(:,ind);
         % Regress dynamics onto remaining terms to find sparse Xi
-        Xi(biginds,ind) = Theta(:,biginds)\dXdt(:,ind); 
+        Xi(biginds,ind) = Theta(:,biginds)\dXdt(:,ind);
     end
 end

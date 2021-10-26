@@ -11,14 +11,14 @@ QW=diag(W);    %initialize weight matrix
 for i=1:iter
     QWt=inv(QW);
     %A=A'
-    At=A*QWt;
+    At=A*QWt; %faz sentido ponderação?
     %pinv_at=At;
     x0=A'*y;  %solução estimada vi LS
-    xh=l1eq_pd(x0,At,[],y,1e-3);
+    xh=l1eq_pd(x0,At,[],y,1e-3);%l1 nao ponderado
     delta=max(norm(xh,Li),1e-3) ;%automatic dynamic update delta
 %     delta should be set slightly smaller than the expected nonzero magnitudes of x0. 
 %     In general, the recovery process tends to be reasonably robust to the choice of delta.--原文中的话
-    xh=QWt*xh;
+    xh=QWt*xh; %ponderado
     %xh=Qwt(1:M,1:M)
     QW=diag(1./(abs(xh)+delta));
     
