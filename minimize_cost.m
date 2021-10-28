@@ -12,5 +12,8 @@ function xi_sparse = minimize_cost(theta,sparsif_coeff,lambda,x_dot,min_type)
     elseif strcmp(min_type,'BPDN')
         xi_sparse=pinv(theta'*theta)*(theta'*x_dot-lambda*ones(min(size(theta)),1)/2);
         xi_sparse = sparsify_xi(xi_sparse,theta,sparsif_coeff,lambda,x_dot,2,'BPDN');
+    elseif strcmp(min_type,'WBPDN')
+        xi_sparse=pinv(theta'*theta)*(theta'*x_dot-lambda*ones(min(size(theta)),1)/2);
+        xi_sparse = sparsify_xi(xi_sparse,theta,sparsif_coeff,lambda,x_dot,2,'WBPDN');
     end
 end

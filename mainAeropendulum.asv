@@ -85,6 +85,102 @@ subplot(2,2,4)
 plot(tResult,u_control_test(1:9999))
 title('Control Signal - Test')
 grid
-%% adding noise and seeing what happens
-xResult_noise= awgn(xResult,40))
+%% testing other cost functions
+Xi_ridge = minimize_cost(Theta,0.98,0.001,dx,'Ridge')
+Xi_sparse_ridge=[{'dtheta','ddtheta'};num2cell(Xi_ridge)]
+library_function=[{'coef'};yout];
+x_dot_cell_rige = [library_function,Xi_sparse_ridge]
 
+Xi_STLS = minimize_cost(Theta,0.99,0.001,dx,'STLS')
+Xi_sparse_STLS=[{'dtheta','ddtheta'};num2cell(Xi_STLS)]
+x_dot_cell_STLS = [library_function,Xi_sparse_STLS]
+
+Xi_BPDN = minimize_cost(Theta,0.99,0.01,dx,'BPDN')
+Xi_sparse_BPDN=[{'dtheta','ddtheta'};num2cell(Xi_BPDN)]
+x_dot_cell_BPDN = [library_function,Xi_sparse_BPDN]
+
+%% adding noise and seeing what happens
+xResult_noise= awgn(xResult,50);
+%xResult_noise=movmean(xResult_noise,50)
+xaug=[xResult_noise u];
+my_trainSINDYc;
+
+Xi_ridge_noise = minimize_cost(Theta,0.98,0.01,dx,'Ridge');
+Xi_sparse_ridge_noise=[{'dtheta','ddtheta'};num2cell(Xi_ridge_noise)];
+library_function=[{'coef'};yout];
+x_dot_cell_ridge = [library_function,Xi_sparse_ridge_noise]
+
+%% noisy STLS
+Xi_STLS_noise = minimize_cost(Theta,0.99,0.01,dx,'STLS');
+Xi_sparse_STLS_noise=[{'dtheta','ddtheta'};num2cell(Xi_STLS_noise)];
+library_function=[{'coef'};yout];
+x_dot_cell_STLS = [library_function,Xi_sparse_STLS_noise]
+
+%% noisy BPDN
+
+Xi_BPDN_noise = minimize_cost(Theta,0.99,0.001,dx,'BPDN');
+Xi_sparse_BPDN_noise=[{'dtheta','ddtheta'};num2cell(Xi_BPDN_noise)];
+library_function=[{'coef'};yout];
+x_dot_cell_BPDN = [library_function,Xi_sparse_BPDN_noise]
+
+
+%% predicting on new data 
+u_control_test = [(ones(1,1000))*1.2 ...
+             (ones(1,1000))*2.5 ...
+             (ones(1,1000))*2 ...
+             (ones(1,1000))*2.75 ...
+             (ones(1,1000))*2.85 ...
+             (ones(1,1000))*1.2 ...
+             (ones(1,1000))*2.7 ...
+             (ones(1,1000))*2.5 ...
+             (zeros(1,1001)) ...
+             (ones(1,1000))*2.85];
+
+[tResult_test,xResult_test,u,dx] = simulateSystem(t_interval,xResult_noise(7000,:),Xi_ridge_noise,u_control_test,n,usesine,polyorder);
+[tResult_ode, xResult_ode, u_test,dx] = getTrainingData(t_interval,xResult_noise(7000,:),u_control_test);
+%% only output
+plot(tResult,xResult_ode(:,1),'LineWidth',1)
+grid
+hold on 
+plot(tResult,xResult_ode(:,2),'LineWidth',1)
+hold on
+plot(tResult,xResult_test(:,1),'LineWidth',1)
+hold on
+plot(tResult,xResult_test(:,2),'LineWidth',1)
+hold off
+title('\theta and \dot \theta - ODE vs SINDyC. MSE = 2.8166e-04','fontweight','bold')
+legend('$\theta_{ODE}$','$\dot \theta_{ODE}$','$\theta_{SINDYc}$','$\dot \theta_{SINDYc}$','Interpreter','Latex')
+
+%%
+
+subplot(2,2,1)
+plot(tResult,xResult(:,1),'LineWidth',1)
+grid
+hold on 
+plot(tResult,xResult(:,2),'LineWidth',1)
+title('Data generated')
+legend('$\theta$','$\dot \theta$','Interpreter','Latex')
+%xlim()
+hold off
+subplot(2,2,2)
+plot(tResult,u_control(1:9999))
+title('Control Signal - Training')
+grid
+
+subplot(2,2,3)
+plot(tResult,xResult_ode(:,1),'LineWidth',1)
+grid
+hold on 
+plot(tResult,xResult_ode(:,2),'LineWidth',1)
+hold on
+plot(tResult,xResult_test(:,1),'LineWidth',1)
+hold on
+plot(tResult,xResult_test(:,2),'LineWidth',1)
+hold off
+title('\theta and \dot \theta - ODE vs SINDyC. MSE = 2.8166e-04','fontweight','bold')
+legend('$\theta_{ODE}$','$\dot \theta_{ODE}$','$\theta_{SINDYc}$','$\dot \theta_{SINDYc}$','Interpreter','Latex')
+
+subplot(2,2,4)
+plot(tResult,u_control_test(1:9999))
+title('Control Signal - Test')
+grid
