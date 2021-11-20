@@ -7,7 +7,7 @@ function [tResult,xResult,u,dx] = simulateSystem(t_interval,x0,Xi,u_control,n,us
    
    for i=1:numel(t_interval)-2
        %handler to generate the specified control inputs 
-       lrz = @(t,x) AeropendulumFromSparseDynamics(t,x,x0,Xi,u_control(i),n,usesine,polyorder);
+       lrz = @(t,x) getValidationData(t,x,x0,Xi,u_control(i),n,usesine,polyorder);
        %integration interval
        t=t_interval(i:i+1);
        %solve the ODE for the specified conditions

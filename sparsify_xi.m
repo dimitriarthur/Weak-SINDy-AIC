@@ -1,5 +1,5 @@
-function xi_sparse = sparsify_xi_stls(xi,theta,sparsif_coeff,lambda,x_dot,n,regression_type)
-W = ones(min(size(theta)),2);    
+function xi_sparse = sparsify_xi(xi,theta,sparsif_coeff,lambda,x_dot,n,regression_type)
+    W = ones(min(size(theta)),2);    
     for k=1:10
         smallinds = (abs(xi)<sparsif_coeff);   % find small coefficients
         xi(smallinds)=0;                % and threshold
@@ -15,7 +15,7 @@ W = ones(min(size(theta)),2);
                 xi(biginds,ind) = pinv(theta(:,biginds)'*theta(:,biginds))*(theta(:,biginds)'*x_dot(:,ind)-lambda*ones(min(size(theta(:,biginds))),1)/2);
             elseif strcmp(regression_type,'WBPDN')
                 xi(biginds,ind) = pinv(theta(:,biginds)'*theta(:,biginds))*(theta(:,biginds)'*x_dot(:,ind)-lambda/2*W(biginds,ind));
-                W=1./(abs(xi).^2 + 10e-4)
+                W=1./(abs(xi).^4 + 10e-2);
             end
         end
     end

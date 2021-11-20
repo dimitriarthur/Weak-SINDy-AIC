@@ -1,8 +1,8 @@
-function xi_sparse = sparsify_xi_stls(xi,theta,sparsif_coeff,lambda,x_dot,n,regression_type)
+function xi_sparse = sparsify_xi(xi,theta,sparsif_coeff,lambda,x_dot,n,regression_type)
+    W = ones(min(size(theta)),2);    
     for k=1:10
         smallinds = (abs(xi)<sparsif_coeff);   % find small coefficients
         xi(smallinds)=0;                % and threshold
-        W = ones(min(size(theta)),2);
         for ind = 1:n                   % n is state dimension
             biginds = ~smallinds(:,ind);
             % Regress dynamics onto remaining terms to find sparse Xi. It
@@ -14,14 +14,8 @@ function xi_sparse = sparsify_xi_stls(xi,theta,sparsif_coeff,lambda,x_dot,n,regr
             elseif strcmp(regression_type,'BPDN') 
                 xi(biginds,ind) = pinv(theta(:,biginds)'*theta(:,biginds))*(theta(:,biginds)'*x_dot(:,ind)-lambda*ones(min(size(theta(:,biginds))),1)/2);
             elseif strcmp(regression_type,'WBPDN')
-                %xi(biginds,ind) = pinv(theta(:,biginds)'*theta(:,biginds))*(theta(:,biginds)'*x_dot(:,ind)-lambda/2*W(:,ind));
-                %xi(biginds,ind) = pinv(theta(:,biginds)'*theta(:,biginds))*(theta(:,biginds)'*x_dot(:,ind)-lambda*ones(min(size(theta(:,biginds))),1)/2)
-                size(theta(:,biginds)'*x_dot(:,ind)
-                %a=theta(:,biginds)'*x_dot(:,ind)
-                %b=-lambda*ones(min(size(theta)),1)/2
-                %size_a=size(a)
-                %size_b=size(b)
-                %W=1./(abs(xi).^2 + 10e-4)
+                xi(biginds,ind) = pinv(theta(:,biginds)'*theta(:,biginds))*(theta(:,biginds)'*x_dot(:,ind)-lambda/2*W(biginds,ind));
+                W=1./(abs(xi).^4 + 10e-2);
             end
         end
     end

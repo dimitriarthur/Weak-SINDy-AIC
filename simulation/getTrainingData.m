@@ -1,4 +1,5 @@
 function [tResult,xResult,u,dx] = getTrainingData(t_interval,x0,u_control)
+   addpath('models')
    tResult = [];
    xResult = [];
    dx=zeros(numel(t_interval)-2,2);
