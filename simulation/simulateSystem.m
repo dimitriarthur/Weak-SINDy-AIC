@@ -11,7 +11,7 @@ function [tResult,xResult,u,dx] = simulateSystem(t_interval,x0,Xi,u_control,n,us
        %integration interval
        t=t_interval(i:i+1);
        %solve the ODE for the specified conditions
-       [t,x]=ode45(lrz,t,x0);
+       [t,x]=ode45(lrz,t,x0)
 
        %managing variables 
        u=cat(1,u,u_control(i));
