@@ -148,10 +148,6 @@ void generate_LHC_array(){
     for (int j=0; j < size_array; j++){
       LHC_array[cont_row][0] = LHC_voltage[i];
       LHC_array[cont_row][1] = LHC_voltage[j];
-      Serial.print(LHC_array[cont_row][0]);
-      Serial.print("\t");
-      Serial.print(LHC_array[cont_row][1]);
-      Serial.print("\n");
       cont_row++;
     }
   }
