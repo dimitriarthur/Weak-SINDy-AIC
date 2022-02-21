@@ -54,6 +54,7 @@ end
 
 %% generating data
 addpath('simulation/models')
+addpath('simulation')
 [tResult, xResult, u,dx] = getTrainingData(t_interval,x0,u_control);
 
 
@@ -228,7 +229,7 @@ plot(dx(:,2))
 title('$\ddot \theta$ - ideal','Interpreter','Latex')
 
 %% noisy STLS
-Xi_STLS_noise = minimize_cos\t(Theta(1:9997,:),0.01,0.01,dx_noisy,'STLS');
+Xi_STLS_noise = minimize_cost(Theta(1:9997,:),0.01,0.01,dx_noisy,'STLS');
 Xi_sparse_STLS_noise=[{'dtheta','ddtheta'};num2cell(Xi_STLS_noise)];
 library_function=[{'coef'};yout];
 x_dot_cell_STLS = [library_function,Xi_sparse_STLS_noise]

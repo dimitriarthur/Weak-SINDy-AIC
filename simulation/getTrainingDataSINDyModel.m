@@ -1,13 +1,14 @@
-function [tResult,xResult,u,dx] = simulateSystem(t_interval,x0,Xi,u_control,n,usesine,polyorder)
+function [tResult,xResult,u,dx] = getTrainingDataSINDyModel(t_interval,x0,u_control)
+   addpath('models')
    tResult = [];
    xResult = [];
    dx=zeros(numel(t_interval)-2,2);
    u=[];
-   a = 1;
-   
-   for i=1:numel(t_interval)-2
+   x0_orig=x0;
+   a=1;
+    for i=1:numel(t_interval)-2
        %handler to generate the specified control inputs 
-       lrz = @(t,x) getValidationData(t,x,x0,Xi,u_control(i),n,usesine,polyorder);
+       lrz = @(t,x) AeropendulumSINDy(t,x,u_control(i));
        %integration interval
        t=t_interval(i:i+1);
        %solve the ODE for the specified conditions
@@ -19,6 +20,11 @@ function [tResult,xResult,u,dx] = simulateSystem(t_interval,x0,Xi,u_control,n,us
        xResult = cat(1, xResult, x(end,:));
 
        x0=x(end,:);
-   end
-   
+    end
+    
+    xResult_aux = [x0_orig; xResult];
+    %computing derivatives 
+    for i=2:numel(t_interval)-1
+       dx(i-1,:)=AeropendulumSINDy(0.1,xResult_aux(i,:),u_control(i))';
+    end
 end

@@ -1,4 +1,5 @@
 addpath('../excitation signals')
+addpath('../simulation')
 LHC_amplitude_Thold
 x0=[0 0];
 sampling_time=0.01;
@@ -24,12 +25,23 @@ xlabel('Sampling Instant')
 
 addpath('..\WSINDy')    
 theta_noise=awgn(xResult(:,1),40);
-theta_dot_noise = TVRegDiff(theta_noise, 10, 0.009, [], 'small', 1e-12, 0.01,0,0); %0.0009
+theta_dot_noise = TVRegDiff(theta_noise, 10, 0.0001, [], 'small', 1e-12, 0.01,0,0); %0.0009
 
 %% plotting derivatives comparative 
-
-
+subplot(2,1,1)
+plot(theta_noise)
+grid
+ylabel('$\theta$','Interpreter','latex')
+subplot(2,1,2)
+plot(dx(:,1),'LineWidth',1)
+grid
+hold on
+plot(theta_dot_noise)
+ylabel('$\dot \theta$','Interpreter','latex')
+xlabel('Sampling Instant')
+legend('$\dot \theta$','$\dot \theta_{approx}$','Interpreter','latex','Fontsize',12)
 %%
+addpath('SINDyC/library_function/')
 xaug=[movmean(theta_noise,40) (theta_dot_noise(1:size(theta_noise,1))) u_aprbs(1:size(theta_noise,1))];
 Theta=myPoolData(xaug,3,2,1);
 Theta_0 = Theta;
@@ -55,4 +67,8 @@ str_vars={'theta','dtheta','u'};
 yout = myPoolDataVariableNames(str_vars,w_sparse,3,2,1);
 Xi_sparse=[{'dtheta','ddtheta'};num2cell(w_sparse)]
 library_function=[{'coef'};yout];
-x_dot_cell = [library_function,Xi_sparse]
+WSINDyc_sparse_matrix = [library_function,Xi_sparse]
+
+Xi_true = [0 0; 0 0; 1 -7.4; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 2.63; 0 -21.88; 0 0; 0 0; 0 0; 0 0; 0 0];
+Xi_sparse_true=[{'dtheta','ddtheta'};num2cell(Xi_true)];
+Xi_true_sparse_matrix = [library_function,Xi_sparse_true]

@@ -61,9 +61,11 @@ t_interval =[0:0.01:100];
 %% as
 u_control=u_control'
 %% generating data
-addpath('simulation/models')
+addpath('simulation')
 addpath('SINDyC/library_function')
 [tResult, xResult, u,dx_no_noise] = getTrainingData(t_interval,x0,u_control);
+
+%%
 theta = xResult(:,1);
 %theta_noisy= sgolayfilt(awgn(theta,30),3,51)
 theta_noise = awgn(theta,30)
@@ -203,8 +205,8 @@ u_control_test = [(ones(1,1000))*1.2 ...
              (zeros(1,1001)) ...
              (ones(1,1000))*2.85];
 
-[tResult_test,xResult_test,u,dx] = simulateSystem(t_interval,xResult_noise(7000,:),Xi_ridge,u_control_test,n,usesine,polyorder);
-[tResult_ode, xResult_ode, u_test,dx] = getTrainingData(t_interval,xResult_noise(7000,:),u_control_test);
+[tResult_test,xResult_test,u,dx] = simulateSystem(t_interval,xResult(7000,:),w_sparse,u_control_test,n,usesine,polyorder);
+[tResult_ode, xResult_ode, u_test,dx] = getTrainingData(t_interval,xResult(7000,:),u_control_test);
 
 %% ploting comparatives of derivatives
 
