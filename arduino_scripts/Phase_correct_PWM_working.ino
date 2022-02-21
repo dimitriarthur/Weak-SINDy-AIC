@@ -17,8 +17,14 @@ volatile int calibration_value;
 volatile int cont_samples=0;
 volatile int cont_LHC_point=0;
 
-int array_indexes[5];
-int LHC_array[5][2] = {{70,100},{90,120},{110,140},{120,105},{80,90}};
+//int LHC_array[5][2] = {{70,100},{90,120},{110,140},{120,105},{80,90}};
+int LHC_voltage[4] = {70, 95, 110, 125};
+const int size_array = sizeof(LHC_voltage)/sizeof(LHC_voltage[0]);
+int LHC_span[4] = {80, 100, 120, 140};
+int LHC_array[size_array*size_array][2];
+int cont_row;
+int array_indexes[size_array*size_array];
+
 int bit_values[10] = {512, 256, 128, 64, 32, 16, 8, 1, 1, 1};
 //the following are defined taking into consideration the timing diagram for operating the AS5040 sensor
 int bit_cont[22] = {0,0,0,0,0,1,0,2,0,3,0,4,0,5,0,6,0,7,0,8,0,9};
@@ -35,6 +41,7 @@ const int CsnPin = 0B00010000;
 void setup() {
   
   setup_PWM(LHC_array[array_indexes[cont_LHC_point]][0]);
+  generate_LHC_array();
   shuffleIndexes(array_indexes,sizeof(array_indexes)/sizeof(array_indexes[0]));
   setup_motor();
   setup_sensor_ports();
@@ -132,6 +139,20 @@ void generate_pulses(){
         cont_LHC_point++;
         cont_samples=0;
       }
+    }
+  }
+}
+
+void generate_LHC_array(){
+  for (int i=0; i < size_array; i++){
+    for (int j=0; j < size_array; j++){
+      LHC_array[cont_row][0] = LHC_voltage[i];
+      LHC_array[cont_row][1] = LHC_voltage[j];
+      Serial.print(LHC_array[cont_row][0]);
+      Serial.print("\t");
+      Serial.print(LHC_array[cont_row][1]);
+      Serial.print("\n");
+      cont_row++;
     }
   }
 }
